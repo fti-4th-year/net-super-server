@@ -237,8 +237,10 @@ int main(int argc, char *argv[]) {
 				port[i].ninst++;
 				
 				printf(
-				  "%s:%d accepted on port %d, total: %d\n", inet_ntoa(cli_addr.sin_addr), 
-				  ntohs(cli_addr.sin_port), serv_portno, port[i].ninst
+				  "%s:%d accepted on port %d, total: %d\n", 
+				  inet_ntoa(cli_addr.sin_addr), 
+				  ntohs(cli_addr.sin_port), 
+				  serv_portno, port[i].ninst
 				  );
 				
 				pid = fork();
@@ -253,6 +255,12 @@ int main(int argc, char *argv[]) {
 					port[i].inst[j].pid = pid;
 					printf("child %d started at port %d\n", pid, serv_portno);
 				} else {
+					char envaddr[STRLEN];
+					char envport[STRLEN];
+					snprintf(envaddr, STRLEN, "REMOTE_ADDR=%s", inet_ntoa(cli_addr.sin_addr));
+					snprintf(envport, STRLEN, "REMOTE_PORT=%d", ntohs(cli_addr.sin_port));
+					putenv(envaddr);
+					putenv(envport);
 					dup2(cli_sockfd, 0);
 					dup2(cli_sockfd, 1);
 					dup2(cli_sockfd, 2);
