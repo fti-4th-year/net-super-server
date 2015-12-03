@@ -253,7 +253,7 @@ int main(int argc, char *argv[]) {
 				}
 				if(pid != 0) {
 					port[i].inst[j].pid = pid;
-					printf("child %d started at port %d\n", pid, serv_portno);
+					printf("child %d started at port %d, total: %d\n", pid, serv_portno, port[i].ninst);
 				} else {
 					char envaddr[STRLEN];
 					char envport[STRLEN];
@@ -296,7 +296,7 @@ int main(int argc, char *argv[]) {
 				close(port[i].inst[j].sockfd);
 				port[i].inst[j].status = 1;
 				port[i].ninst--;
-				printf("child %d exited at port %d\n", port[i].inst[j].pid, port[i].portno);
+				printf("child %d exited at port %d, total: %d\n", port[i].inst[j].pid, port[i].portno, port[i].ninst);
 			}
 		}
 	}
